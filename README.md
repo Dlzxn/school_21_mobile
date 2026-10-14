@@ -7,6 +7,16 @@ Kotlin, Jetpack Compose, Gradle Kotlin DSL + version catalog. minSdk 26, compile
 > Неофициальное приложение: показывает сайт платформы и данные её API. Логин и пароль (если включить
 > автовход) хранятся только на устройстве в зашифрованном виде и отправляются только на `auth.21-school.ru`.
 
+## Экосистема School 21
+
+Неофициальные клиенты платформы для всех устройств — с автовходом, закладками, «Где сидит пир» и уведомлениями.
+
+| Устройство | Репозиторий | Скачать |
+|---|---|---|
+| Android | [school_21_mobile](https://github.com/Dlzxn/school_21_mobile) | [последний релиз](https://github.com/Dlzxn/school_21_mobile/releases/latest) |
+| Windows · macOS · Linux | [school_21_desktop](https://github.com/Dlzxn/school_21_desktop) | [последний релиз](https://github.com/Dlzxn/school_21_desktop/releases/latest) |
+| iPhone | [school_21_ios](https://github.com/Dlzxn/school_21_ios) | в разработке |
+
 ## Возможности
 
 - **Платформа на весь экран** — тёмная тема в цвет сайта, pull-to-refresh, «Назад» по истории, экран «Нет подключения».
