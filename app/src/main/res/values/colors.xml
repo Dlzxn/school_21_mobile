@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Фирменный фиолетовый School 21 (из CSS сайта). -->
+    <color name="brand">#FF861BE3</color>
+    <!-- Фон под status bar / navigation bar и экран загрузки. Подгоните под шапку сайта. -->
+    <color name="system_bar">#FFFFFFFF</color>
+    <color name="ic_launcher_background">#FF861BE3</color>
+</resources>

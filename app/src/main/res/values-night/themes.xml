@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Тёмная тема (isLightTheme=false): WebView сообщит сайту prefers-color-scheme: dark. -->
+    <style name="Theme.App" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/system_bar</item>
+    </style>
+</resources>

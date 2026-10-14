@@ -1,0 +1,32 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Локальные настройки (путь к SDK)
+local.properties
+
+# Подпись — никогда не коммитить
+keystore.properties
+*.jks
+*.keystore
+
+# Артефакты сборки
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# Логи и мусор ОС
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">School 21</string>
+    <string name="offline_title">Нет подключения</string>
+    <string name="offline_message">Не удалось загрузить страницу. Проверьте интернет и попробуйте ещё раз.</string>
+    <string name="offline_retry">Повторить</string>
+    <string name="no_app_to_open">Нет приложения, чтобы открыть ссылку</string>
+    <string name="download_started">Загрузка начата: %1$s</string>
+    <string name="download_unsupported">Этот тип загрузки не поддерживается в приложении</string>
+    <string name="download_failed">Не удалось начать загрузку</string>
+    <string name="download_permission_denied">Нет разрешения на сохранение файлов</string>
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Тема запуска: системный splash screen (API 31+) и его бэкпорт из core-splashscreen. -->
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/system_bar</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/ic_launcher_background</item>
+        <item name="postSplashScreenTheme">@style/Theme.App</item>
+    </style>
+
+    <!-- Светлая тема: WebView (targetSdk 33+) сообщит сайту prefers-color-scheme: light. -->
+    <style name="Theme.App" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/system_bar</item>
+    </style>
+</resources>
