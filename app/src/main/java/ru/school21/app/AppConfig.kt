@@ -15,6 +15,7 @@ object AppConfig {
 
     /** Репозиторий с релизами — для проверки обновлений. */
     const val GITHUB_REPO = "Dlzxn/school_21_mobile"
+    const val AUTHOR_GITHUB = "Dlzxn"
 
     /**
      * Функции на внутреннем GraphQL сайта («колокольчик», личный календарь). Недокументированный API:

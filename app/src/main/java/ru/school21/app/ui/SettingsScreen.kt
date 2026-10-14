@@ -21,7 +21,9 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
@@ -52,6 +54,8 @@ fun SettingsScreen(
     onOpenAutoLogin: () -> Unit,
     onCheckUpdates: () -> Unit,
     onOpenRepository: () -> Unit,
+    onReportBug: () -> Unit,
+    onOpenAuthor: () -> Unit,
     onMenuButtonChanged: (MenuButtonPosition) -> Unit,
     onClose: () -> Unit,
 ) {
@@ -243,6 +247,25 @@ fun SettingsScreen(
                 title = stringResource(R.string.settings_repository),
                 subtitle = "github.com/${AppConfig.GITHUB_REPO}",
                 onClick = onOpenRepository,
+            )
+        }
+
+        SectionLabel(R.string.settings_feedback)
+        SettingsCard {
+            SettingsRow(
+                icon = Icons.Filled.Warning,
+                iconTint = S21Colors.Error,
+                title = stringResource(R.string.settings_report_bug),
+                subtitle = stringResource(R.string.settings_report_bug_hint),
+                onClick = onReportBug,
+            )
+            CardDivider()
+            SettingsRow(
+                icon = Icons.Filled.Person,
+                iconTint = S21Colors.Green,
+                title = stringResource(R.string.settings_author),
+                subtitle = stringResource(R.string.settings_author_value),
+                onClick = onOpenAuthor,
             )
         }
         Spacer(Modifier.height(12.dp))

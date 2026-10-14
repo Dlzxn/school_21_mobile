@@ -171,6 +171,8 @@ class MainActivity : ComponentActivity() {
                 onOpenAutoLogin = { uiState.screen = Screen.AUTO_LOGIN },
                 onCheckUpdates = { checkForUpdates(manual = true) },
                 onOpenRepository = { openExternally("https://github.com/${AppConfig.GITHUB_REPO}") },
+                onReportBug = { openExternally("https://github.com/${AppConfig.GITHUB_REPO}/issues") },
+                onOpenAuthor = { openExternally("https://github.com/${AppConfig.AUTHOR_GITHUB}") },
                 onMenuButtonChanged = { menuButton = it },
                 onClose = { uiState.screen = Screen.NONE },
             )

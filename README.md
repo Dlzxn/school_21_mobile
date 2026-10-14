@@ -38,6 +38,13 @@ Kotlin, Jetpack Compose, Gradle Kotlin DSL + version catalog. minSdk 26, compile
 
 Приложение только **читает** данные — никаких действий на платформе от вашего имени не выполняет.
 
+## Нашли баг?
+
+Создайте [issue на GitHub](https://github.com/Dlzxn/school_21_mobile/issues): что делали, что ожидали,
+что получилось, модель телефона и версия Android, скриншот. В приложении: ⋯ → Настройки → «Сообщить об ошибке».
+
+Автор: [Dlzxn](https://github.com/Dlzxn) · School 21: combinef
+
 ## Установка (для пиров)
 
 Нужен Android 8.0 или новее.

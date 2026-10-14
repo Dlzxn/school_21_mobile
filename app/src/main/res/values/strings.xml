@@ -134,4 +134,10 @@
     <string name="channel_agenda">Напоминания о моих событиях</string>
     <string name="reminder_starts_at">Начало в %1$s</string>
     <string name="widget_event_mine">вы записаны</string>
+    <!-- Обратная связь -->
+    <string name="settings_feedback">Обратная связь</string>
+    <string name="settings_report_bug">Сообщить об ошибке</string>
+    <string name="settings_report_bug_hint">Нашли баг или есть идея? Создайте issue на GitHub — опишите, что делали, и приложите скриншот</string>
+    <string name="settings_author">Автор</string>
+    <string name="settings_author_value" translatable="false">Dlzxn · School 21: combinef</string>
 </resources>
