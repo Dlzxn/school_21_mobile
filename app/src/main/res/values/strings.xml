@@ -9,4 +9,26 @@
     <string name="download_unsupported">Этот тип загрузки не поддерживается в приложении</string>
     <string name="download_failed">Не удалось начать загрузку</string>
     <string name="download_permission_denied">Нет разрешения на сохранение файлов</string>
+
+    <!-- Автовход -->
+    <string name="auto_login_title">Автовход</string>
+    <string name="auto_login_shortcut">Автовход</string>
+    <string name="auto_login_in_progress">Выполняется вход…</string>
+    <string name="auto_login_offer">Сессия на платформе истекает пару раз в день. Входить автоматически?</string>
+    <string name="auto_login_failed">Автовход не удался. Возможно, сменился пароль.</string>
+    <string name="auto_login_setup">Настроить</string>
+    <string name="auto_login_fix">Исправить</string>
+    <string name="auto_login_not_now">Не сейчас</string>
+    <string name="auto_login_description">Когда платформа завершит сессию, приложение само введёт логин и пароль на странице входа.\n\nДанные хранятся только на этом устройстве, зашифрованные ключом Android Keystore, и отправляются только на auth.21-school.ru.</string>
+    <string name="auto_login_enabled_for">Включён для %1$s</string>
+    <string name="auto_login_login">Логин</string>
+    <string name="auto_login_password">Пароль</string>
+    <string name="auto_login_save">Проверить и сохранить</string>
+    <string name="auto_login_change">Изменить</string>
+    <string name="auto_login_disable">Отключить и удалить данные</string>
+    <string name="auto_login_close">Закрыть</string>
+    <string name="auto_login_wrong_credentials">Неверный логин или пароль</string>
+    <string name="auto_login_network_error">Не удалось проверить: нет связи с сервером входа</string>
+    <string name="auto_login_saved">Автовход включён</string>
+    <string name="auto_login_disabled">Автовход отключён, данные удалены</string>
 </resources>

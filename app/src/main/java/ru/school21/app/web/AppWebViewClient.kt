@@ -8,6 +8,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
 import ru.school21.app.AppConfig
+import ru.school21.app.auth.AutoLogin
 
 /**
  * Навигация, ошибки загрузки и история.
@@ -16,6 +17,7 @@ import ru.school21.app.AppConfig
 class AppWebViewClient(
     private val state: WebUiState,
     private val router: UrlRouter,
+    private val autoLogin: AutoLogin,
     private val onRenderProcessGone: () -> Unit,
 ) : WebViewClient() {
 
@@ -47,6 +49,7 @@ class AppWebViewClient(
             view.clearHistory()
         }
         state.canGoBack = view.canGoBack()
+        autoLogin.onPageFinished(view, url)
     }
 
     override fun doUpdateVisitedHistory(view: WebView, url: String?, isReload: Boolean) {

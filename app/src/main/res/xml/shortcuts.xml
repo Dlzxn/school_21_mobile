@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Долгое нажатие на иконку приложения. targetPackage — applicationId. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="auto_login"
+        android:shortcutShortLabel="@string/auto_login_shortcut">
+        <intent
+            android:action="ru.school21.app.action.AUTO_LOGIN_SETTINGS"
+            android:targetClass="ru.school21.app.MainActivity"
+            android:targetPackage="ru.school21.app" />
+    </shortcut>
+</shortcuts>

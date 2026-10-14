@@ -6,12 +6,19 @@ import android.os.SystemClock
 import android.view.ViewGroup
 import android.webkit.CookieManager
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import ru.school21.app.auth.AutoLogin
+import ru.school21.app.auth.CredentialStore
 import ru.school21.app.ui.AppTheme
+import ru.school21.app.ui.AuthOverlays
+import ru.school21.app.ui.AutoLoginSettingsScreen
 import ru.school21.app.ui.WebScreen
 import ru.school21.app.web.AppWebChromeClient
 import ru.school21.app.web.AppWebViewClient
@@ -31,6 +38,8 @@ class MainActivity : ComponentActivity() {
     private val uiState = WebUiState()
     private lateinit var webView: WebView
     private var webViewDestroyed = false
+    private lateinit var credentialStore: CredentialStore
+    private lateinit var autoLogin: AutoLogin
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -46,9 +55,11 @@ class MainActivity : ComponentActivity() {
         // Лаунчеры ActivityResult регистрируются здесь, до STARTED.
         val fileChooser = FileChooser(this)
         val downloadHandler = DownloadHandler(this)
+        credentialStore = CredentialStore(this)
+        autoLogin = AutoLogin(credentialStore, uiState)
         webView = WebViewFactory.create(
             context = this,
-            webViewClient = AppWebViewClient(uiState, UrlRouter(this), ::onRenderProcessGone),
+            webViewClient = AppWebViewClient(uiState, UrlRouter(this), autoLogin, ::onRenderProcessGone),
             webChromeClient = AppWebChromeClient(uiState, fileChooser),
             downloadListener = downloadHandler,
         )
@@ -62,23 +73,38 @@ class MainActivity : ComponentActivity() {
         } else {
             webView.loadUrl(deepLinkUrl(intent) ?: AppConfig.START_URL)
         }
+        if (savedInstanceState == null) handleShortcut(intent)
 
         setContent {
             AppTheme {
                 // На стартовой странице колбэк выключен — системный «Назад» закрывает приложение.
                 BackHandler(enabled = uiState.canGoBack) { webView.goBack() }
-                WebScreen(
-                    webView = webView,
-                    state = uiState,
-                    onRefresh = ::refresh,
-                    onRetry = ::retry,
-                )
+                Box {
+                    WebScreen(
+                        webView = webView,
+                        state = uiState,
+                        onRefresh = ::refresh,
+                        onRetry = ::retry,
+                    )
+                    AuthOverlays(state = uiState, onOpenSettings = { uiState.showAutoLoginSettings = true })
+                    if (uiState.showAutoLoginSettings) {
+                        // Объявлен позже — перехватывает «Назад» раньше WebView.
+                        BackHandler { uiState.showAutoLoginSettings = false }
+                        AutoLoginSettingsScreen(
+                            store = credentialStore,
+                            onSaved = ::onAutoLoginSaved,
+                            onDisabled = { toast(R.string.auto_login_disabled) },
+                            onClose = { uiState.showAutoLoginSettings = false },
+                        )
+                    }
+                }
             }
         }
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        handleShortcut(intent)
         deepLinkUrl(intent)?.let { url ->
             uiState.failedUrl = null
             webView.loadUrl(url)
@@ -120,6 +146,24 @@ class MainActivity : ComponentActivity() {
         webView.loadUrl(url)
     }
 
+    private fun onAutoLoginSaved() {
+        toast(R.string.auto_login_saved)
+        uiState.showAutoLoginSettings = false
+        // Если сейчас открыта форма входа — перезагружаем её, чтобы автовход сработал сразу.
+        if (AppConfig.isAuthHost(webView.url?.toUri()?.host)) {
+            autoLogin.reset()
+            webView.reload()
+        }
+    }
+
+    private fun handleShortcut(intent: Intent?) {
+        if (intent?.action == ACTION_AUTO_LOGIN_SETTINGS) uiState.showAutoLoginSettings = true
+    }
+
+    private fun toast(resId: Int) {
+        Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
+    }
+
     /** Упавший WebView нельзя использовать дальше: уничтожаем и пересоздаём Activity. */
     private fun onRenderProcessGone() {
         destroyWebView()
@@ -142,5 +186,8 @@ class MainActivity : ComponentActivity() {
 
     private companion object {
         const val KEY_WEBVIEW_STATE = "webview_state"
+
+        /** Ярлык «Автовход» на иконке приложения (res/xml/shortcuts.xml). */
+        const val ACTION_AUTO_LOGIN_SETTINGS = "ru.school21.app.action.AUTO_LOGIN_SETTINGS"
     }
 }

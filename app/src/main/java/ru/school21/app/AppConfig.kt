@@ -18,6 +18,11 @@ object AppConfig {
      */
     val AUTH_HOSTS = setOf("auth.21-school.ru")
 
+    /** Keycloak: эндпоинт токенов и клиент сайта — для проверки логина/пароля при сохранении. */
+    const val KEYCLOAK_TOKEN_URL =
+        "https://auth.21-school.ru/auth/realms/EduPowerKeycloak/protocol/openid-connect/token"
+    const val KEYCLOAK_CLIENT_ID = "school21"
+
     /** Суффикс User-Agent, по которому сайт может отличить приложение. */
     val USER_AGENT_SUFFIX = " ${APP_NAME}Android/${BuildConfig.VERSION_NAME}"
 
