@@ -15,7 +15,7 @@ Kotlin, Jetpack Compose, Gradle Kotlin DSL + version catalog. minSdk 26, compile
 |---|---|---|
 | Android | [school_21_mobile](https://github.com/Dlzxn/school_21_mobile) | [последний релиз](https://github.com/Dlzxn/school_21_mobile/releases/latest) |
 | Windows · macOS · Linux | [school_21_desktop](https://github.com/Dlzxn/school_21_desktop) | [последний релиз](https://github.com/Dlzxn/school_21_desktop/releases/latest) |
-| iPhone | [school_21_ios](https://github.com/Dlzxn/school_21_ios) | в разработке |
+| iPhone | [school_21_ios](https://github.com/Dlzxn/school_21_ios) | [последний релиз](https://github.com/Dlzxn/school_21_ios/releases/latest) |
 
 ## Возможности
 
