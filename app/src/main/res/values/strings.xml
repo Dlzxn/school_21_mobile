@@ -12,7 +12,6 @@
 
     <!-- Автовход -->
     <string name="auto_login_title">Автовход</string>
-    <string name="auto_login_shortcut">Автовход</string>
     <string name="auto_login_in_progress">Выполняется вход…</string>
     <string name="auto_login_offer">Сессия на платформе истекает пару раз в день. Входить автоматически?</string>
     <string name="auto_login_failed">Автовход не удался. Возможно, сменился пароль.</string>
@@ -31,4 +30,108 @@
     <string name="auto_login_network_error">Не удалось проверить: нет связи с сервером входа</string>
     <string name="auto_login_saved">Автовход включён</string>
     <string name="auto_login_disabled">Автовход отключён, данные удалены</string>
+
+    <!-- Ярлыки на иконке -->
+    <string name="shortcut_calendar">Календарь</string>
+    <string name="shortcut_projects">Проекты</string>
+    <string name="shortcut_peer">Где сидит пир</string>
+    <string name="shortcut_settings">Настройки</string>
+
+    <!-- Меню -->
+    <string name="menu_title">Меню</string>
+    <string name="menu_peer">Где сидит пир</string>
+    <string name="menu_peer_hint">Место в кампусе, уровень, коины по логину</string>
+    <string name="menu_reload">Обновить страницу</string>
+    <string name="menu_share">Поделиться ссылкой</string>
+    <string name="menu_open_in_browser">Открыть в браузере</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_settings_hint">Автовход, уведомления, виджеты</string>
+
+    <!-- Где сидит пир -->
+    <string name="peer_title">Где сидит пир</string>
+    <string name="peer_login_hint">Логин пира</string>
+    <string name="peer_search">Найти</string>
+    <string name="peer_me">Я</string>
+    <string name="peer_needs_auto_login">Данные берутся из официального API Школы 21, для него нужен ваш логин и пароль. Настройте автовход — он хранит их зашифрованными на устройстве.</string>
+    <string name="peer_not_found">Пир с таким логином не найден</string>
+    <string name="peer_rate_limited">Слишком много запросов, попробуйте через минуту</string>
+    <string name="peer_error">Не удалось получить данные. Проверьте интернет</string>
+    <string name="peer_bad_credentials">Сохранённый пароль не подходит — обновите его в настройках автовхода</string>
+    <string name="peer_status">Статус: %1$s</string>
+    <string name="peer_open_profile">Открыть профиль на платформе</string>
+
+    <!-- Настройки -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_auto_login_off">Выключен</string>
+    <string name="settings_notifications">Уведомления</string>
+    <string name="settings_needs_auto_login">Для уведомлений нужен включённый автовход.</string>
+    <string name="settings_notify_platform">Уведомления платформы</string>
+    <string name="settings_notify_events">Новые события кампуса</string>
+    <string name="settings_notify_events_hint">Мероприятия, экзамены и тесты из официального API.</string>
+    <string name="settings_widget">Виджеты</string>
+    <string name="settings_menu_button">Кнопка меню</string>
+    <string name="settings_menu_right">Справа внизу</string>
+    <string name="settings_menu_left">Слева внизу</string>
+    <string name="settings_menu_hidden">Скрыть</string>
+    <string name="settings_menu_hint">Если кнопка скрыта, настройки открываются долгим нажатием на иконку приложения → «Настройки».</string>
+    <string name="settings_about">О приложении</string>
+    <string name="settings_version">Версия %1$s</string>
+    <string name="settings_check_updates">Проверить обновления</string>
+
+    <!-- Обновления -->
+    <string name="update_available">Доступна версия %1$s</string>
+    <string name="update_hint">Скачайте APK и установите поверх — вход сохранится.</string>
+    <string name="update_download">Скачать</string>
+    <string name="update_latest">У вас последняя версия</string>
+    <string name="update_check_failed">Не удалось проверить обновления</string>
+
+    <!-- Уведомления -->
+    <string name="channel_platform">Уведомления платформы</string>
+    <string name="channel_events">Новые события кампуса</string>
+    <string name="notification_new_event">Новое событие: %1$s</string>
+
+    <!-- Виджеты -->
+    <string name="widget_profile_name">School 21 — профиль</string>
+    <string name="widget_profile_description">Уровень, XP, коины, PRP/CRP, место в кампусе и логтайм</string>
+    <string name="widget_points_name">School 21 — очки</string>
+    <string name="widget_points_description">Коины, PRP и CRP</string>
+    <string name="widget_campus_name">School 21 — где я</string>
+    <string name="widget_campus_description">Кластер, ряд и место в кампусе, логтайм</string>
+    <string name="widget_events_name">School 21 — события</string>
+    <string name="widget_events_description">Ближайшие события кампуса</string>
+    <string name="widget_loading">Загрузка…</string>
+    <string name="widget_needs_login">Включите автовход: ⋯ → Настройки</string>
+    <string name="widget_level_label">уровень</string>
+    <string name="widget_to_next_level">до %1$d уровня</string>
+    <string name="widget_coins">коины</string>
+    <string name="widget_points">Коины %1$d · PRP %2$d · CRP %3$d</string>
+    <string name="widget_not_in_campus">Сейчас не в кампусе</string>
+    <string name="widget_logtime">Логтайм: %1$s ч (в среднем за неделю)</string>
+    <string name="widget_logtime_short">⏱ %1$s ч в неделю (ср.)</string>
+    <string name="widget_events_title">Ближайшие события</string>
+    <!-- Дизайн 1.2 -->
+    <string name="settings_header_subtitle">Версия %1$s · неофициальный клиент платформы</string>
+    <string name="settings_account">Аккаунт</string>
+    <string name="settings_notify_platform_hint">То же, что в «колокольчике» на сайте</string>
+    <string name="settings_background_title">Работа в фоне</string>
+    <string name="settings_background_hint">Проверка примерно раз в 30 минут. На Xiaomi и подобных разрешите автозапуск и работу без ограничений</string>
+    <string name="settings_widget_how_title">Как добавить виджет</string>
+    <string name="settings_widget_how">1. Удерживайте палец на пустом месте рабочего стола.\n2. Нажмите «Виджеты».\n3. Найдите School 21 и перетащите нужный: профиль, очки, «где я» или события.\n\nДля данных нужен включённый автовход.</string>
+    <string name="settings_repository">Исходный код и релизы</string>
+    <string name="settings_disclaimer">Приложение не связано со Школой 21 официально: оно показывает сайт платформы и данные её открытого API. Логин и пароль хранятся только на этом устройстве.</string>
+    <string name="peer_place">%1$s · ряд %2$s, место %3$d</string>
+    <string name="widget_in_campus">В кампусе</string>
+    <string name="widget_out_of_campus">Вне кампуса</string>
+    <string name="widget_out_of_campus_big">Не в кампусе</string>
+    <string name="widget_coalition_rank">#%1$d в трайбе</string>
+    <string name="widget_campus_label">МЕСТО В КАМПУСЕ</string>
+    <string name="widget_updated">обновлено %1$s</string>
+    <string name="widget_events_empty_title">Пока пусто</string>
+    <string name="widget_events_empty">Событий кампуса на две недели вперёд нет</string>
+    <!-- Личный календарь -->
+    <string name="settings_notify_agenda">Напоминания о моих событиях</string>
+    <string name="settings_notify_agenda_hint">За 15 минут до того, на что вы записаны: события, проверки</string>
+    <string name="channel_agenda">Напоминания о моих событиях</string>
+    <string name="reminder_starts_at">Начало в %1$s</string>
+    <string name="widget_event_mine">вы записаны</string>
 </resources>

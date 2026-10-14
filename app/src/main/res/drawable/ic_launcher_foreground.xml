@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Placeholder-иконка «21». Видимая зона адаптивной иконки — круг Ø66dp в центре 108dp.
-     Замена: Android Studio → File → New → Image Asset (перезапишет этот файл и mipmap-*). -->
+<!-- Placeholder-иконка «21» с фирменным градиентом. Видимая зона адаптивной иконки — круг Ø66dp
+     в центре 108dp. Замена: Android Studio → File → New → Image Asset. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
@@ -10,14 +11,36 @@
     <path
         android:pathData="M37,45 C37,39.5 41.5,36 47,36 C52.5,36 57,39.5 57,45 C57,50 53,53 49,57 L37,70 L58,70"
         android:strokeWidth="6"
-        android:strokeColor="#FFFFFFFF"
         android:strokeLineCap="round"
-        android:strokeLineJoin="round" />
+        android:strokeLineJoin="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:endX="74"
+                android:endY="70"
+                android:startX="36"
+                android:startY="36"
+                android:type="linear">
+                <item android:color="#FF36C5F0" android:offset="0" />
+                <item android:color="#FF44EB99" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
     <!-- «1» -->
     <path
         android:pathData="M66,41 L73,36 L73,70"
         android:strokeWidth="6"
-        android:strokeColor="#FFFFFFFF"
         android:strokeLineCap="round"
-        android:strokeLineJoin="round" />
+        android:strokeLineJoin="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:endX="74"
+                android:endY="70"
+                android:startX="36"
+                android:startY="36"
+                android:type="linear">
+                <item android:color="#FF36C5F0" android:offset="0" />
+                <item android:color="#FF44EB99" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
 </vector>

@@ -14,8 +14,9 @@
         </intent>
     </queries>
 
-    <!-- TODO(push): для пуш-уведомлений добавить POST_NOTIFICATIONS, FirebaseMessagingService
-         и передачу токена сайту. Сейчас не реализовано. -->
+    <!-- Уведомления платформы и событий (Android 13+ спрашивает разрешение). Это не пуши:
+         SyncWorker сам опрашивает API. TODO(push): настоящие пуши требуют сервера Школы. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="false"
@@ -56,5 +57,62 @@
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
         </activity>
+
+        <!-- Снимки с камеры для загрузки на сайт (см. FileChooser). -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Виджеты на Glance (ru.school21.app.widget). -->
+        <receiver
+            android:name=".widget.ProfileWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_profile_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_profile_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.PointsWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_points_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_points_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.CampusWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_campus_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_campus_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.EventsWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_events_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_events_info" />
+        </receiver>
     </application>
 </manifest>

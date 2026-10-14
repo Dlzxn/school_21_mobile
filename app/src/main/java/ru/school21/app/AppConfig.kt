@@ -7,7 +7,23 @@ package ru.school21.app
 object AppConfig {
     const val APP_NAME = "School21"
 
-    const val START_URL = "https://platform.21-school.ru/"
+    const val PLATFORM_ORIGIN = "https://platform.21-school.ru"
+    const val START_URL = "$PLATFORM_ORIGIN/"
+
+    /** Официальный Open API Школы 21. */
+    const val OPEN_API_URL = "$PLATFORM_ORIGIN/services/21-school/api"
+
+    /** Репозиторий с релизами — для проверки обновлений. */
+    const val GITHUB_REPO = "Dlzxn/school_21_mobile"
+
+    /**
+     * Функции на внутреннем GraphQL сайта («колокольчик», личный календарь). Недокументированный API:
+     * если после обновления платформы он сломается, выключите здесь — переключатели пропадут.
+     */
+    const val PLATFORM_NOTIFICATIONS_ENABLED = true
+
+    /** Как часто фоновая задача проверяет уведомления, события и обновляет виджет. */
+    const val SYNC_INTERVAL_MINUTES = 30L
 
     /** Домены, открываемые внутри WebView (вместе со всеми поддоменами). */
     val INTERNAL_DOMAINS = setOf("21-school.ru")

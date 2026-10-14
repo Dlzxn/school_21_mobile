@@ -1,5 +1,14 @@
 package ru.school21.app.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -79,31 +88,23 @@ fun AutoLoginSettingsScreen(
         }
     }
 
-    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-        Column(
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-                .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Column(modifier = Modifier.widthIn(max = 480.dp).fillMaxWidth()) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = stringResource(R.string.auto_login_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.weight(1f),
-                    )
-                    TextButton(onClick = onClose) { Text(stringResource(R.string.auto_login_close)) }
-                }
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = stringResource(R.string.auto_login_description),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(Modifier.height(24.dp))
-
+    ScreenScaffold(R.string.auto_login_title, onClose) {
+        Row(verticalAlignment = Alignment.Top) {
+            Box(
+                modifier = Modifier.size(40.dp).clip(CircleShape).background(S21Colors.Teal.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(Icons.Filled.Lock, contentDescription = null, tint = S21Colors.Teal, modifier = Modifier.size(20.dp))
+            }
+            Spacer(Modifier.width(14.dp))
+            Text(
+                text = stringResource(R.string.auto_login_description),
+                style = MaterialTheme.typography.bodyMedium,
+                color = S21Colors.TextSecondary,
+            )
+        }
+        Spacer(Modifier.height(24.dp))
+        Column {
                 val currentLogin = savedLogin
                 if (!editing && currentLogin != null) {
                     Text(
@@ -129,6 +130,7 @@ fun AutoLoginSettingsScreen(
                     }
                 } else {
                     OutlinedTextField(
+                        shape = RoundedCornerShape(16.dp),
                         value = login,
                         onValueChange = { login = it; errorRes = null },
                         label = { Text(stringResource(R.string.auto_login_login)) },
@@ -139,6 +141,7 @@ fun AutoLoginSettingsScreen(
                     )
                     Spacer(Modifier.height(12.dp))
                     OutlinedTextField(
+                        shape = RoundedCornerShape(16.dp),
                         value = password,
                         onValueChange = { password = it; errorRes = null },
                         label = { Text(stringResource(R.string.auto_login_password)) },
@@ -173,7 +176,6 @@ fun AutoLoginSettingsScreen(
                         }
                     }
                 }
-            }
         }
     }
 }

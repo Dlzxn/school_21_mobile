@@ -2,12 +2,40 @@
 <!-- Долгое нажатие на иконку приложения. targetPackage — applicationId. -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:enabled="true"
         android:icon="@mipmap/ic_launcher"
-        android:shortcutId="auto_login"
-        android:shortcutShortLabel="@string/auto_login_shortcut">
+        android:shortcutId="calendar"
+        android:shortcutShortLabel="@string/shortcut_calendar">
         <intent
-            android:action="ru.school21.app.action.AUTO_LOGIN_SETTINGS"
+            android:action="android.intent.action.VIEW"
+            android:data="https://platform.21-school.ru/calendar"
+            android:targetClass="ru.school21.app.MainActivity"
+            android:targetPackage="ru.school21.app" />
+    </shortcut>
+    <shortcut
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="projects"
+        android:shortcutShortLabel="@string/shortcut_projects">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://platform.21-school.ru/projects"
+            android:targetClass="ru.school21.app.MainActivity"
+            android:targetPackage="ru.school21.app" />
+    </shortcut>
+    <shortcut
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="peer"
+        android:shortcutShortLabel="@string/shortcut_peer">
+        <intent
+            android:action="ru.school21.app.action.PEER"
+            android:targetClass="ru.school21.app.MainActivity"
+            android:targetPackage="ru.school21.app" />
+    </shortcut>
+    <shortcut
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutId="settings"
+        android:shortcutShortLabel="@string/shortcut_settings">
+        <intent
+            android:action="ru.school21.app.action.SETTINGS"
             android:targetClass="ru.school21.app.MainActivity"
             android:targetPackage="ru.school21.app" />
     </shortcut>

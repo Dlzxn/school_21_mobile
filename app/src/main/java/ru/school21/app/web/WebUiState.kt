@@ -1,9 +1,12 @@
 package ru.school21.app.web
 
+import android.view.View
+import android.webkit.WebChromeClient
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import ru.school21.app.update.UpdateInfo
 
 /** Баннер на странице входа. */
 enum class AuthBanner {
@@ -14,7 +17,13 @@ enum class AuthBanner {
     FAILED,
 }
 
-/** Состояние WebView, которое наблюдает Compose UI. Пишется из WebViewClient / WebChromeClient. */
+/** Нативные экраны поверх WebView. */
+enum class Screen { NONE, SETTINGS, AUTO_LOGIN, PEER }
+
+/** Видео, развёрнутое на весь экран (onShowCustomView). */
+class FullscreenVideo(val view: View, val callback: WebChromeClient.CustomViewCallback)
+
+/** Состояние WebView и нативного UI, которое наблюдает Compose. */
 class WebUiState {
     /** Прогресс загрузки 0..100. */
     var progress by mutableIntStateOf(0)
@@ -38,5 +47,13 @@ class WebUiState {
     /** «Не сейчас» на предложении автовхода — до следующего запуска приложения. */
     var autoLoginOfferDismissed by mutableStateOf(false)
 
-    var showAutoLoginSettings by mutableStateOf(false)
+    var screen by mutableStateOf(Screen.NONE)
+
+    /** Открыто меню (кнопка поверх сайта). */
+    var menuOpen by mutableStateOf(false)
+
+    var fullscreenVideo by mutableStateOf<FullscreenVideo?>(null)
+
+    /** Найдена новая версия приложения — показываем карточку. */
+    var availableUpdate by mutableStateOf<UpdateInfo?>(null)
 }

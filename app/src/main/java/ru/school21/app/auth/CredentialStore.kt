@@ -11,16 +11,19 @@ import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
-data class Credentials(val login: String, val password: String)
+data class Credentials(val login: String, val password: String) {
+    /** Логин для Open API: без домена, если пользователь ввёл его как почту. */
+    val apiLogin: String get() = login.substringBefore('@').lowercase()
+}
 
 /**
- * Логин и пароль для автовхода. Шифруются AES-256-GCM ключом из Android Keystore:
+ * Логин, пароль и refresh-токены. Шифруются AES-256-GCM ключом из Android Keystore:
  * ключ не извлекается из устройства, без него зашифрованные данные бесполезны.
  * Бэкап приложения отключён в манифесте, так что данные не уходят в облако.
  */
 class CredentialStore(context: Context) {
 
-    private val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    private val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun hasCredentials(): Boolean = prefs.contains(KEY_LOGIN) && prefs.contains(KEY_PASSWORD)
 
@@ -38,14 +41,28 @@ class CredentialStore(context: Context) {
 
     fun save(credentials: Credentials) {
         prefs.edit {
+            // Токены старого аккаунта больше не нужны.
+            prefs.all.keys.filter { it.startsWith(SECRET_PREFIX) }.forEach(::remove)
             putString(KEY_LOGIN, encrypt(credentials.login))
             putString(KEY_PASSWORD, encrypt(credentials.password))
         }
     }
 
     fun clear() {
-        prefs.edit { remove(KEY_LOGIN); remove(KEY_PASSWORD) }
+        prefs.edit { clear() }
         runCatching { keyStore().deleteEntry(KEY_ALIAS) }
+    }
+
+    /** Произвольный секрет (refresh-токен и т.п.), зашифрованный тем же ключом. */
+    fun getSecret(name: String): String? {
+        val value = prefs.getString(SECRET_PREFIX + name, null) ?: return null
+        return runCatching { decrypt(value) }.getOrNull()
+    }
+
+    fun putSecret(name: String, value: String?) {
+        prefs.edit {
+            if (value == null) remove(SECRET_PREFIX + name) else putString(SECRET_PREFIX + name, encrypt(value))
+        }
     }
 
     private fun encrypt(plain: String): String {
@@ -86,6 +103,7 @@ class CredentialStore(context: Context) {
         const val PREFS_NAME = "auto_login"
         const val KEY_LOGIN = "login"
         const val KEY_PASSWORD = "password"
+        const val SECRET_PREFIX = "secret_"
         const val KEY_ALIAS = "auto_login_key"
         const val ANDROID_KEYSTORE = "AndroidKeyStore"
         const val TRANSFORMATION = "AES/GCM/NoPadding"
