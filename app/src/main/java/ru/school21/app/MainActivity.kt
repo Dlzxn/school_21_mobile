@@ -31,7 +31,10 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.File
 import ru.school21.app.api.TokenProvider
 import ru.school21.app.auth.AutoLogin
 import ru.school21.app.auth.CredentialStore
@@ -41,6 +44,7 @@ import ru.school21.app.ui.AppMenu
 import ru.school21.app.ui.AppTheme
 import ru.school21.app.ui.AuthOverlays
 import ru.school21.app.ui.AutoLoginSettingsScreen
+import ru.school21.app.ui.FriendsScreen
 import ru.school21.app.ui.MenuAction
 import ru.school21.app.ui.MenuButton
 import ru.school21.app.ui.PeerScreen
@@ -48,6 +52,8 @@ import ru.school21.app.ui.SettingsScreen
 import ru.school21.app.ui.UpdateBanner
 import ru.school21.app.ui.WebScreen
 import ru.school21.app.update.UpdateChecker
+import ru.school21.app.update.UpdateInfo
+import ru.school21.app.update.UpdateInstaller
 import ru.school21.app.web.AppWebChromeClient
 import ru.school21.app.web.AppWebViewClient
 import ru.school21.app.web.DownloadHandler
@@ -73,6 +79,10 @@ class MainActivity : ComponentActivity() {
     private lateinit var autoLogin: AutoLogin
     private lateinit var settings: AppSettings
     private var menuButton by mutableStateOf(MenuButtonPosition.RIGHT)
+    private var updateJob: Job? = null
+
+    /** Скачанный APK, ждущий разрешения на установку из настроек. */
+    private var pendingApk: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -142,11 +152,17 @@ class MainActivity : ComponentActivity() {
                     if (update != null && uiState.authBanner == null && uiState.screen == Screen.NONE) {
                         UpdateBanner(
                             update = update,
-                            onDownload = {
-                                openExternally(update.apkUrl)
+                            progress = uiState.updateProgress,
+                            failed = uiState.updateFailed,
+                            onUpdate = { installUpdate(update) },
+                            onOpenRelease = {
+                                openExternally(update.pageUrl)
                                 uiState.availableUpdate = null
                             },
-                            onDismiss = { uiState.availableUpdate = null },
+                            onDismiss = {
+                                updateJob?.cancel()
+                                uiState.availableUpdate = null
+                            },
                         )
                     }
                     NativeScreens()
@@ -171,7 +187,8 @@ class MainActivity : ComponentActivity() {
                 onOpenAutoLogin = { uiState.screen = Screen.AUTO_LOGIN },
                 onCheckUpdates = { checkForUpdates(manual = true) },
                 onOpenRepository = { openExternally("https://github.com/${AppConfig.GITHUB_REPO}") },
-                onReportBug = { openExternally("https://github.com/${AppConfig.GITHUB_REPO}/issues") },
+                onOpenSite = { openExternally(AppConfig.SITE_URL) },
+                onReportBug ={ openExternally("https://github.com/${AppConfig.GITHUB_REPO}/issues") },
                 onOpenAuthor = { openExternally("https://github.com/${AppConfig.AUTHOR_GITHUB}") },
                 onMenuButtonChanged = { menuButton = it },
                 onClose = { uiState.screen = Screen.NONE },
@@ -183,6 +200,14 @@ class MainActivity : ComponentActivity() {
                 onClose = { uiState.screen = Screen.NONE },
             )
             Screen.PEER -> PeerScreen(
+                onOpenProfile = { login ->
+                    uiState.screen = Screen.NONE
+                    webView.loadUrl("${AppConfig.PLATFORM_ORIGIN}/profile/$login")
+                },
+                onSetupAutoLogin = { uiState.screen = Screen.AUTO_LOGIN },
+                onClose = { uiState.screen = Screen.NONE },
+            )
+            Screen.FRIENDS -> FriendsScreen(
                 onOpenProfile = { login ->
                     uiState.screen = Screen.NONE
                     webView.loadUrl("${AppConfig.PLATFORM_ORIGIN}/profile/$login")
@@ -236,6 +261,45 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         if (!webViewDestroyed) webView.onResume()
+        // Вернулись из настроек «Установка неизвестных приложений» — продолжаем установку.
+        pendingApk?.let { apk ->
+            if (UpdateInstaller.canInstall(this)) {
+                pendingApk = null
+                UpdateInstaller.install(this, apk)
+            }
+        }
+    }
+
+    /** Скачать APK новой версии и открыть системный установщик. */
+    private fun installUpdate(update: UpdateInfo) {
+        if (!update.apkUrl.endsWith(".apk")) {
+            openExternally(update.pageUrl)
+            return
+        }
+        uiState.updateFailed = false
+        uiState.updateProgress = 0f
+        updateJob = lifecycleScope.launch {
+            try {
+                val apk = UpdateInstaller.download(this@MainActivity, update) { p ->
+                    runOnUiThread { uiState.updateProgress = p }
+                }
+                uiState.updateProgress = null
+                uiState.availableUpdate = null
+                if (UpdateInstaller.canInstall(this@MainActivity)) {
+                    UpdateInstaller.install(this@MainActivity, apk)
+                } else {
+                    pendingApk = apk
+                    toast(R.string.update_allow_install)
+                    UpdateInstaller.openInstallPermission(this@MainActivity)
+                }
+            } catch (e: CancellationException) {
+                uiState.updateProgress = null
+                throw e
+            } catch (_: Exception) {
+                uiState.updateProgress = null
+                uiState.updateFailed = true
+            }
+        }
     }
 
     override fun onPause() {
@@ -280,6 +344,7 @@ class MainActivity : ComponentActivity() {
             )
             MenuAction.OPEN_IN_BROWSER -> openExternally(url)
             MenuAction.PEER -> uiState.screen = Screen.PEER
+            MenuAction.FRIENDS -> uiState.screen = Screen.FRIENDS
             MenuAction.SETTINGS -> uiState.screen = Screen.SETTINGS
         }
     }

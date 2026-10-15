@@ -80,7 +80,7 @@
 
     <!-- Обновления -->
     <string name="update_available">Доступна версия %1$s</string>
-    <string name="update_hint">Скачайте APK и установите поверх — вход сохранится.</string>
+    <string name="update_hint">Приложение скачает новую версию и откроет установку — вход и настройки сохранятся.</string>
     <string name="update_download">Скачать</string>
     <string name="update_latest">У вас последняя версия</string>
     <string name="update_check_failed">Не удалось проверить обновления</string>
@@ -140,4 +140,33 @@
     <string name="settings_report_bug_hint">Нашли баг или есть идея? Создайте issue на GitHub — опишите, что делали, и приложите скриншот</string>
     <string name="settings_author">Автор</string>
     <string name="settings_author_value" translatable="false">Dlzxn · School 21: combinef</string>
+    <string name="settings_site">Сайт School 21 Apps</string>
+    <!-- Мои друзья -->
+    <string name="menu_friends">Мои друзья</string>
+    <string name="menu_friends_hint">Кто из друзей в кампусе и где сидит</string>
+    <string name="friends_title">Мои друзья</string>
+    <string name="friends_add_hint">Логин друга</string>
+    <string name="friends_add">Добавить</string>
+    <string name="friends_empty">Добавьте логины друзей — здесь будет видно, кто сейчас в кампусе и за каким компьютером.</string>
+    <string name="friends_limit">Не больше %1$d друзей</string>
+    <string name="friends_already">Уже в списке</string>
+    <string name="friends_notify">Сообщать, когда друг в кампусе</string>
+    <string name="friends_notify_hint">Проверка в фоне примерно раз в 30 минут</string>
+    <string name="friends_in_campus">В кампусе: %1$d из %2$d</string>
+    <string name="friends_refresh">Обновить</string>
+    <string name="friends_remove">Убрать из друзей</string>
+    <string name="friends_level">уровень %1$d</string>
+    <string name="friends_unknown">Не удалось загрузить</string>
+    <string name="peer_add_friend">Добавить в друзья</string>
+    <string name="peer_is_friend">В друзьях</string>
+    <string name="channel_friends">Друзья в кампусе</string>
+    <string name="notification_friend_arrived">%1$s теперь в кампусе</string>
+    <!-- Обновление в один тап -->
+    <string name="channel_updates">Новые версии приложения</string>
+    <string name="update_notification">Откройте приложение и нажмите «Обновить»</string>
+    <string name="update_install">Обновить</string>
+    <string name="update_downloading">Скачиваю обновление…</string>
+    <string name="update_failed">Не удалось скачать. Можно скачать вручную со страницы релиза.</string>
+    <string name="update_open_release">Открыть релиз</string>
+    <string name="update_allow_install">Разрешите установку обновлений для School 21 и вернитесь назад</string>
 </resources>

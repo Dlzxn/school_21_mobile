@@ -20,6 +20,8 @@ import ru.school21.app.api.AgendaItem
 import ru.school21.app.api.OpenApi
 import ru.school21.app.api.PlatformApi
 import ru.school21.app.auth.CredentialStore
+import ru.school21.app.friends.Friends
+import ru.school21.app.update.UpdateChecker
 import ru.school21.app.widget.WidgetData
 import ru.school21.app.widget.WidgetEvent
 import ru.school21.app.widget.Widgets
@@ -45,8 +47,52 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
         if (settings.notifyPlatform) step("platform") { checkPlatformNotifications() }
         if (settings.notifyEvents) step("events") { checkCampusEvents() }
         if (settings.notifyAgenda) step("agenda") { scheduleAgendaReminders() }
+        if (settings.notifyFriends) step("friends") { checkFriends() }
         if (Widgets.hasWidgets(applicationContext)) step("widget") { refreshWidget(credentials.apiLogin) }
+        step("update") { checkUpdate() }
         return Result.success()
+    }
+
+    /** Уведомление «друг пришёл в кампус». Первая проверка только запоминает, кто где. */
+    private suspend fun checkFriends() {
+        val friends = settings.friends
+        if (friends.isEmpty()) return
+        val now = Friends.places(OpenApi(applicationContext), friends)
+        val before = settings.friendPlaces
+        if (before != null) {
+            Friends.arrivals(before, now).take(MAX_PER_RUN).forEach { (login, ws) ->
+                Notifications.show(
+                    context = applicationContext,
+                    channel = Notifications.CHANNEL_FRIENDS,
+                    id = ("friend$login").hashCode(),
+                    title = applicationContext.getString(R.string.notification_friend_arrived, login),
+                    text = applicationContext.getString(R.string.peer_place, ws.clusterName, ws.row.uppercase(), ws.number),
+                    url = "${AppConfig.PLATFORM_ORIGIN}/profile/$login",
+                )
+            }
+        }
+        // Для друзей, по которым запрос не удался, оставляем прежнее значение.
+        val merged = before.orEmpty() + now.mapValues { (_, ws) -> ws?.let(Friends::placeLabel).orEmpty() }
+        settings.friendPlaces = merged.filterKeys { it in friends }
+    }
+
+    /** Раз в несколько часов — уведомление о новой версии (одно на версию). */
+    private suspend fun checkUpdate() {
+        val now = System.currentTimeMillis()
+        // Отдельная отметка: проверка при запуске приложения (баннер) от этой не зависит.
+        if (now - settings.lastBackgroundUpdateCheck < UPDATE_CHECK_INTERVAL_MS) return
+        settings.lastBackgroundUpdateCheck = now
+        val update = UpdateChecker.check() ?: return
+        if (settings.notifiedUpdate == update.version) return
+        settings.notifiedUpdate = update.version
+        Notifications.show(
+            context = applicationContext,
+            channel = Notifications.CHANNEL_UPDATES,
+            id = NOTIFICATION_UPDATE,
+            title = applicationContext.getString(R.string.update_available, update.version),
+            text = applicationContext.getString(R.string.update_notification),
+            url = AppConfig.START_URL,
+        )
     }
 
     private suspend fun step(name: String, block: suspend () -> Unit) {
@@ -158,6 +204,8 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
         private const val MAX_PER_RUN = 5
         private const val EVENTS_LOOKAHEAD_DAYS = 14L
         private const val MAX_WIDGET_EVENTS = 10
+        private const val NOTIFICATION_UPDATE = 21_000
+        const val UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000L
 
         private val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
@@ -166,7 +214,8 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
         fun isNeeded(context: Context): Boolean {
             val settings = AppSettings(context)
             return CredentialStore(context).hasCredentials() &&
-                (settings.notifyPlatform || settings.notifyEvents || settings.notifyAgenda || Widgets.hasWidgets(context))
+                (settings.notifyPlatform || settings.notifyEvents || settings.notifyAgenda ||
+                    (settings.notifyFriends && settings.friends.isNotEmpty()) || Widgets.hasWidgets(context))
         }
 
         fun reschedule(context: Context) {

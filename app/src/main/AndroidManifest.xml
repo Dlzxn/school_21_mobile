@@ -18,6 +18,9 @@
          SyncWorker сам опрашивает API. TODO(push): настоящие пуши требуют сервера Школы. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Обновление в один тап: открыть системный установщик для скачанного APK из релиза. -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"

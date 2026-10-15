@@ -18,7 +18,7 @@ enum class AuthBanner {
 }
 
 /** Нативные экраны поверх WebView. */
-enum class Screen { NONE, SETTINGS, AUTO_LOGIN, PEER }
+enum class Screen { NONE, SETTINGS, AUTO_LOGIN, PEER, FRIENDS }
 
 /** Видео, развёрнутое на весь экран (onShowCustomView). */
 class FullscreenVideo(val view: View, val callback: WebChromeClient.CustomViewCallback)
@@ -56,4 +56,10 @@ class WebUiState {
 
     /** Найдена новая версия приложения — показываем карточку. */
     var availableUpdate by mutableStateOf<UpdateInfo?>(null)
+
+    /** Скачивание обновления: null — не идёт, 0..1 — доля, -1 — размер неизвестен. */
+    var updateProgress by mutableStateOf<Float?>(null)
+
+    /** Скачать не получилось — баннер предлагает открыть релиз в браузере. */
+    var updateFailed by mutableStateOf(false)
 }

@@ -20,6 +20,8 @@ object Notifications {
     const val CHANNEL_PLATFORM = "platform"
     const val CHANNEL_EVENTS = "events"
     const val CHANNEL_AGENDA = "agenda"
+    const val CHANNEL_FRIENDS = "friends"
+    const val CHANNEL_UPDATES = "updates"
 
     fun createChannels(context: Context) {
         val manager = context.getSystemService(NotificationManager::class.java)
@@ -39,6 +41,16 @@ object Notifications {
                     CHANNEL_EVENTS,
                     context.getString(R.string.channel_events),
                     NotificationManager.IMPORTANCE_DEFAULT,
+                ),
+                NotificationChannel(
+                    CHANNEL_FRIENDS,
+                    context.getString(R.string.channel_friends),
+                    NotificationManager.IMPORTANCE_DEFAULT,
+                ),
+                NotificationChannel(
+                    CHANNEL_UPDATES,
+                    context.getString(R.string.channel_updates),
+                    NotificationManager.IMPORTANCE_LOW,
                 ),
             )
         )

@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -71,7 +72,7 @@ fun MenuButton(position: MenuButtonPosition, onClick: () -> Unit) {
     }
 }
 
-enum class MenuAction { RELOAD, SHARE, OPEN_IN_BROWSER, PEER, SETTINGS }
+enum class MenuAction { RELOAD, SHARE, OPEN_IN_BROWSER, PEER, FRIENDS, SETTINGS }
 
 /**
  * Шторка меню. Рисуется в окне приложения (а не отдельным диалогом, как ModalBottomSheet),
@@ -121,6 +122,13 @@ fun AppMenu(onAction: (MenuAction) -> Unit, onDismiss: () -> Unit) {
                     title = stringResource(R.string.menu_peer),
                     subtitle = stringResource(R.string.menu_peer_hint),
                     onClick = { onAction(MenuAction.PEER) },
+                )
+                SettingsRow(
+                    icon = Icons.Filled.Face,
+                    iconTint = S21Colors.Teal,
+                    title = stringResource(R.string.menu_friends),
+                    subtitle = stringResource(R.string.menu_friends_hint),
+                    onClick = { onAction(MenuAction.FRIENDS) },
                 )
                 SettingsRow(Icons.Filled.Refresh, stringResource(R.string.menu_reload), onClick = { onAction(MenuAction.RELOAD) })
                 SettingsRow(

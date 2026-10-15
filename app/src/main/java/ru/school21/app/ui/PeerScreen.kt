@@ -48,7 +48,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import org.json.JSONException
+import ru.school21.app.AppSettings
 import ru.school21.app.R
+import ru.school21.app.friends.Friends
 import ru.school21.app.api.Coalition
 import ru.school21.app.api.HttpException
 import ru.school21.app.api.InvalidCredentialsException
@@ -81,6 +83,8 @@ fun PeerScreen(
     val api = remember { OpenApi(context) }
     val scope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
+    val settings = remember { AppSettings(context) }
+    var friends by remember { mutableStateOf(settings.friends) }
 
     var login by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
@@ -168,7 +172,25 @@ fun PeerScreen(
                 CircularProgressIndicator()
             }
             errorRes != null -> Text(stringResource(errorRes!!), color = MaterialTheme.colorScheme.error)
-            info != null -> PeerCard(info!!, onOpenProfile)
+            info != null -> {
+                val peerLogin = info!!.participant.login.lowercase()
+                PeerCard(info!!, onOpenProfile)
+                if (peerLogin != ownLogin.lowercase()) {
+                    Spacer(Modifier.height(12.dp))
+                    val isFriend = peerLogin in friends
+                    OutlinedButton(
+                        onClick = {
+                            friends = friends + peerLogin
+                            settings.friends = friends
+                            settings.friendPlaces = null
+                        },
+                        enabled = !isFriend && friends.size < Friends.MAX,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(stringResource(if (isFriend) R.string.peer_is_friend else R.string.peer_add_friend))
+                    }
+                }
+            }
         }
     }
 }

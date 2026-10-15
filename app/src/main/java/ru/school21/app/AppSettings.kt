@@ -23,6 +23,36 @@ class AppSettings(context: Context) {
         get() = prefs.getBoolean("notify_events", false)
         set(value) = prefs.edit { putBoolean("notify_events", value) }
 
+    /** Уведомлять, когда друг пришёл в кампус (официальный Open API). */
+    var notifyFriends: Boolean
+        get() = prefs.getBoolean("notify_friends", false)
+        set(value) = prefs.edit { putBoolean("notify_friends", value) }
+
+    /** Логины друзей в порядке добавления. */
+    var friends: List<String>
+        get() = prefs.getString("friends", null)?.split(',')?.filter { it.isNotBlank() }.orEmpty()
+        set(value) = prefs.edit { putString("friends", value.distinct().joinToString(",")) }
+
+    /**
+     * Где были друзья при прошлой фоновой проверке: логин → место («» — не в кампусе).
+     * null — проверки ещё не было, уведомлять не о чем.
+     */
+    var friendPlaces: Map<String, String>?
+        get() = prefs.getString("friend_places", null)?.let { raw ->
+            val json = org.json.JSONObject(raw)
+            json.keys().asSequence().associateWith { json.optString(it) }
+        }
+        set(value) = prefs.edit { putString("friend_places", value?.let { org.json.JSONObject(it).toString() }) }
+
+    var lastBackgroundUpdateCheck: Long
+        get() = prefs.getLong("last_bg_update_check", 0)
+        set(value) = prefs.edit { putLong("last_bg_update_check", value) }
+
+    /** Версия, о которой уже напомнили уведомлением, — чтобы не повторяться. */
+    var notifiedUpdate: String?
+        get() = prefs.getString("notified_update", null)
+        set(value) = prefs.edit { putString("notified_update", value) }
+
     var menuButton: MenuButtonPosition
         get() = MenuButtonPosition.entries.getOrElse(prefs.getInt("menu_button", 0)) { MenuButtonPosition.RIGHT }
         set(value) = prefs.edit { putInt("menu_button", value.ordinal) }

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -26,9 +27,19 @@ import androidx.compose.ui.unit.dp
 import ru.school21.app.R
 import ru.school21.app.update.UpdateInfo
 
-/** Карточка «Доступна новая версия» внизу экрана. */
+/**
+ * Карточка «Доступна новая версия» внизу экрана: «Обновить» скачивает APK и открывает установщик.
+ * [progress] не null — идёт скачивание; [failed] — не вышло, предлагаем страницу релиза.
+ */
 @Composable
-fun UpdateBanner(update: UpdateInfo, onDownload: () -> Unit, onDismiss: () -> Unit) {
+fun UpdateBanner(
+    update: UpdateInfo,
+    progress: Float?,
+    failed: Boolean,
+    onUpdate: () -> Unit,
+    onOpenRelease: () -> Unit,
+    onDismiss: () -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -40,11 +51,32 @@ fun UpdateBanner(update: UpdateInfo, onDownload: () -> Unit, onDismiss: () -> Un
             Column(Modifier.padding(16.dp)) {
                 Text(stringResource(R.string.update_available, update.version), style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.height(4.dp))
-                Text(stringResource(R.string.update_hint), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    stringResource(
+                        when {
+                            failed -> R.string.update_failed
+                            progress != null -> R.string.update_downloading
+                            else -> R.string.update_hint
+                        }
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
                 Spacer(Modifier.height(8.dp))
+                if (progress != null) {
+                    if (progress >= 0f) {
+                        LinearProgressIndicator(progress = { progress }, modifier = Modifier.fillMaxWidth())
+                    } else {
+                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                    }
+                    Spacer(Modifier.height(8.dp))
+                }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     TextButton(onClick = onDismiss) { Text(stringResource(R.string.auto_login_not_now)) }
-                    Button(onClick = onDownload) { Text(stringResource(R.string.update_download)) }
+                    if (failed) {
+                        Button(onClick = onOpenRelease) { Text(stringResource(R.string.update_open_release)) }
+                    } else {
+                        Button(onClick = onUpdate, enabled = progress == null) { Text(stringResource(R.string.update_install)) }
+                    }
                 }
             }
         }

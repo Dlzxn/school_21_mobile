@@ -54,6 +54,7 @@ fun SettingsScreen(
     onOpenAutoLogin: () -> Unit,
     onCheckUpdates: () -> Unit,
     onOpenRepository: () -> Unit,
+    onOpenSite: () -> Unit,
     onReportBug: () -> Unit,
     onOpenAuthor: () -> Unit,
     onMenuButtonChanged: (MenuButtonPosition) -> Unit,
@@ -247,6 +248,14 @@ fun SettingsScreen(
                 title = stringResource(R.string.settings_repository),
                 subtitle = "github.com/${AppConfig.GITHUB_REPO}",
                 onClick = onOpenRepository,
+            )
+            CardDivider()
+            SettingsRow(
+                icon = Icons.Filled.Home,
+                iconTint = S21Colors.Green,
+                title = stringResource(R.string.settings_site),
+                subtitle = AppConfig.SITE_URL.removePrefix("https://"),
+                onClick = onOpenSite,
             )
         }
 

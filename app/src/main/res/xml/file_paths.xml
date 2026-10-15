@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- FileProvider: доступна только папка временных снимков с камеры. -->
+<!-- FileProvider: снимки с камеры и скачанное обновление (APK для системного установщика). -->
 <paths>
     <cache-path name="camera" path="camera/" />
+    <cache-path name="updates" path="updates/" />
 </paths>
